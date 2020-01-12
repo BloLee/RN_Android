@@ -1,179 +1,145 @@
 
 import React, {Component} from 'react';
-import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    ScrollView,
-    Dimensions,
-    Platform
-} from 'react-native';
+import { AppRegistry,StyleSheet,Text,View,Image,
+TouchableOpacity,ScrollView,Dimensions,Platform } from 'react-native';
 
 var {width} = Dimensions.get('window');
 const ios = Platform.OS;
 class ScrollViewImage extends Component{
-   /**
+    constructor(props){
+        super(props)
+        this.state = {
+            duration:3000,  //滚动间隔时间
+            currentPage:0,  //默认 原点
+        }
+    }
+    /**
      * 一般在此方法中处理一些耗时操作
-     */
+    */ 
     componentDidMount() {
-      this._startTimer();
-
-  }
-
-
-  componentWillUnMount() {
-      clearInterval(this.interval);
-  }
-
-  /**
-   * 演染图片
-   * @returns {Array}
-   * @private
-   */
-  _renderAllImage() {
-      var imgArr = [];
-      var imgData = this.props.imgData;
-      for (var i in imgData) {
-          imgArr.push(
-              <Image
-                  key={i}
-                  source={{uri: imgData[i].icon}}
-                  style={{width: width, height: 140}}
-              />
-          )
-      }
-      return imgArr;
-  }
-
-  /**
-   * 渲染圆点指示器
-   * @private
-   */
-  _renderCircleIndicator() {
-
-      var circleArr = [];
-      var imgData = this.props.imgData;
-      var style;
-      for (var i in imgData) {
-          style = i == this.state.currentPage ? {color: 'orange'} : {color: 'white'};
-          circleArr.push(
-              <Text key={i} style={[{fontSize: 25}, style]}>&bull;</Text>
-          );
-      }
-
-      return circleArr;
-  }
-
-  /**
-   * 当一页滑动结束时调用
-   * @param scrollView
-   */
-  onAnimationEnd(scrollView) {
-
-      // 计算一页滑动的偏移量
-      var offSetX = scrollView.nativeEvent.contentOffset.x;
-      console.log(offSetX);
-      // 算出当前为第几页
-      var currentPage = Math.floor((offSetX / width));
-      this.setState({
-          currentPage: currentPage
-      });
-  }
-
-  /**
-   * 开始拖拽时的回调
-   * @private
-   */
-  onScrollBeginDrag() {
-      clearInterval(this.interval);
-  }
-
-  /**
-   * 拖拽停止时的回调
-   * @private
-   */
-  onScrollEndDrag() {
-      this._startTimer();
-  }
-
-  /**
-   * 开启定时器
-   * @private
-   */
-  _startTimer() {
-
-      var scrollView = this.refs.scrollView;
-      var imgCount = this.props.imgData.length;
-
-      this.interval = setInterval(() => {
-
-          //记录当前正在活动的图片
-          var activePage = 0;
-          if ((this.state.currentPage + 1) >= imgCount) { //防止越界
-              activePage = 0;
-          } else {
-              activePage = this.state.currentPage + 1;
-          }
-
-          this.setState({
-              currentPage: activePage
-          });
-
-          //让ScrollView动起来
-          var offSetX = activePage * width;
-          scrollView.scrollResponderScrollTo({x: offSetX, y: 0, animated: true});
-
-      }, this.state.duration);
-  } 
-  render () {
-    return (
-      // <ScrollView
-      //   ref="scrollView"
-      //   horizontal={true}  //设置滚动方向水平 默认 垂直
-      //   showsHorizontalScrollIndicator={false}   //用来控制在滑动时是否显示滚动条
-      //   pagingEnabled={true}    //水平滑动时，可以出现分页效果
-      //   onMomentumScrollEnd={(scrollView)=>this.onAnimationEnd(scrollView)}
-      // /> 
-      <View style={styles.container}> 
-          <ScrollView
-              ref="scrollView"
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              pagingEnabled={true}
-              onMomentumScrollEnd={(scrollView)=>this.onAnimationEnd(scrollView)}
-              onScrollBeginDrag={this.onScrollBeginDrag.bind(this)}
-              onScrollEndDrag={this.onScrollEndDrag.bind(this)}
-          >
-              {this._renderAllImage()}
-          </ScrollView>
-
-          <View style={styles.circleContainer}>
-              {this._renderCircleIndicator()}
-          </View>
-      </View>
-    )
-  }
+      this._startTimer(); 
+    } 
+    componentWillUnMount() {
+        // clearInterval(this.interval);
+    } 
+    //演染图片
+    _renderAllImage() {
+        let imgArr = [];
+        let imgData = this.props.imgData;
+        for (let i=0; i<imgData.length;i++) {
+            imgArr.push(
+                <TouchableOpacity key={i} activeOpacity={1}
+                onPress={() => this._openUrl(imgData[i])} >
+                    <Image source={{uri: imgData[i].imagePath}}
+                        style={{width: width, height:200}} />
+                </TouchableOpacity>
+            )
+        }
+        return imgArr;
+    }
+    //渲染 小圆点
+    _renderPageCircle(){
+        let allCircle = [];
+        let imgData = this.props.imgData;
+        const { currentPage } = this.state;
+        for(let i=0;i<imgData.length;i++){
+            allCircle.push(
+                <Text key={i} style={[styles.instructions, i==currentPage?styles.activeInstruct:"" ]}></Text>
+            )
+        }
+        return allCircle;
+    }
+    //点击跳转页面
+    _openUrl(data){
+        console.log(data)
+    } 
+    //滑动结束 一帧
+    onAnimationEnd(e){ 
+        //求出偏移量
+        let offsetX = e.nativeEvent.contentOffset.x;
+        //计算 当前页数 第几个原点
+        let pageIndex = Math.floor(offsetX/width); 
+        // console.log(pageIndex)
+        this.setState({currentPage:pageIndex})
+    }
+    //开始拖动 清除定时器
+    onScrollBeginDrag(e){
+        this.timer && clearTimeout(this.timer);
+    }
+    //停止滑动 开始自动滑动
+    onScrollEndDrag(){
+        // console.log(this.state.currentPage)
+        this.timer && this._startTimer(); 
+    }
+    //自动滑动
+    _startTimer(){
+        let scrollView = this.refs.scrollView;
+        const { imgData } = this.props;
+        const { currentPage,duration } = this.state; 
+        // console.log(currentPage +"--------------------------"); 
+        //4.1 设置圆点
+        let activePage = currentPage;
+        this.timer = setTimeout( () => {
+            //判断圆点
+            if( activePage >= imgData.length-1 ){
+                activePage = 0
+            }else{
+                activePage = activePage+1;
+            }
+            //更新选中圆点
+            this.setState({currentPage:activePage});
+            //设置图片滑动
+            let offsetX = activePage * width;
+            // console.log(offsetX)
+            scrollView.scrollResponderScrollTo({x:offsetX,y:0,animated:true});
+            this._startTimer();
+        },duration)
+    }
+    render () { 
+        return (  
+            <View style={styles.container}> 
+                <ScrollView ref="scrollView"
+                    horizontal={true}  //设置滚动方向水平 默认 垂直
+                    showsHorizontalScrollIndicator={false} //用来控制在滑动时是否显示滚动条
+                    pagingEnabled={true} //水平滑动时，可以出现分页效果
+                    onMomentumScrollEnd={(scrollView)=>this.onAnimationEnd(scrollView)}  //手动滑动结束
+                    onScrollBeginDrag={this.onScrollBeginDrag.bind(this)}    //开始滑动 
+                    onScrollEndDrag={this.onScrollEndDrag.bind(this)}        //停止滑动  
+                >
+                    {this._renderAllImage()} 
+                </ScrollView>
+                <View style={styles.circleContainer}>
+                    {this._renderPageCircle()}
+                </View> 
+            </View>
+        )
+    }
 }
 const styles = StyleSheet.create({
   container: {
-      marginTop: ios == 'ios' ? 25 : 0
+    marginTop: ios == 'ios' ? 25 : 0
   },
   circleContainer: {
-      width: width,
-      height: 25,
-      flexDirection: 'row',
-      backgroundColor: 'rgba(0,0,0,0.4)',
-      alignItems: 'center',
-      position: 'absolute',
-      bottom: 0
+    width: width,
+    height: 30,
+    backgroundColor: 'rgba(0,0,0,0.4)', 
+    position: 'absolute',
+    bottom: 0,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent:'center',
   },
-  instructions: {
-      textAlign: 'center',
-      color: '#333333',
-      marginBottom: 5,
+  instructions: { 
+    borderWidth:2,borderColor:"#999",
+    marginRight:15,
+    width:10,
+    height:10,
+    borderRadius:50,
   },
+  activeInstruct:{
+      backgroundColor:"#fff",
+      borderWidth:2,borderColor:"#fff",
+  }
 });
 module.exports = ScrollViewImage;
 // RNScrollViewDemo;

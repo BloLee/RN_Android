@@ -12,7 +12,8 @@ const Toast = {
   show: msg => {
     RootToast.show(msg, {
       position: 0,
-      duration: 500 
+      duration: 500,
+      delay:0,
     })
   }, 
   showLong: msg => {

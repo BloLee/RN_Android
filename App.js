@@ -23,12 +23,18 @@ import {
   Colors,
   DebugInstructions,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import Adres from "./until/Adres"; 
-import getRouter from "./pages/router";  
-export default getRouter;
-// export default class App extends React.Component {
-//   render() {
-//   return <getRouter />;
-//   }
-// }
+} from 'react-native/Libraries/NewAppScreen'; 
+import TabBar from "./router/router";  
+import { Provider } from 'react-redux';
+import store from './redux/index'; 
+// export default getRouter;
+export default class App extends React.Component {
+  render() {
+    return (
+      // 将store作为prop传入，即可使应用中的所有组件使用store 
+      <Provider store={store}>
+        <TabBar />
+      </Provider>
+    )
+  }
+}
