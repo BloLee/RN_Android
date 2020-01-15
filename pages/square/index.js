@@ -4,6 +4,7 @@ import { StatusBar,SafeAreaView,ScrollView,RefreshControl,View,Text,
 import ScrollableTab from "../components/ScrollableTab";
 import FlatListAll from "../components/FlatListAll"; 
 import StatusBarHead from "../components/StatusBarHead";
+import Container from "../components/contanter";
 export default class SquarePage extends Component{
   constructor(props){
     super(props)
@@ -13,10 +14,13 @@ export default class SquarePage extends Component{
   }
   render () {
     return (
-      <SafeAreaView style={{flex:1,}}>  
-        <StatusBarHead />
+      <Container statusBarBackgroundColor={"#3498db"} barStyle={"light-content"}>
         <ScrollableTab name={"square"} />
-      </SafeAreaView>
+      </Container>
+      // <SafeAreaView style={{flex:1,}}>  
+      //   <StatusBarHead />
+      //   <ScrollableTab name={"square"} />
+      // </SafeAreaView>
     )
   }
 }

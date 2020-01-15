@@ -4,8 +4,9 @@
  import React from 'react';
 import StatusBarHead from './StatusBarHead';
 import PropTypes from 'prop-types';
-import {PanResponder, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
+import {SafeAreaView,PanResponder,View, Text, Keyboard, KeyboardAvoidingView, Platform,StyleSheet,StatusBar} from 'react-native';
 import {withNavigation} from 'react-navigation'; 
+const STATUSBAR_HEIGHT = (Platform.OS === 'ios' ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight);
 class Container extends React.PureComponent {
   // 构造
   constructor(props) {
@@ -47,26 +48,28 @@ class Container extends React.PureComponent {
   };
   render() {
     return (
-
-        <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled={Platform.OS === "ios"}>
+        <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled={Platform.OS === "ios"}> 
             <SafeAreaView style={{flex:1,}}>  
-            {/* <View style={[styles.container]}> */}
-                <StatusBarHead barStyle={this.props.barStyle} backgroundColor={this.props.statusBarBackgroundColor}/>
-                <View {...this.panResponder.panHandlers} style={[styles.body, this.props.style]}>
-                    {this.props.children}
+                <View style={[styles.container]}>
+                {/* ?this.props.statusBarBackgroundColor: "#3498db" */}
+                    <StatusBarHead barStyle={this.props.barStyle} backgroundColor={this.props.statusBarBackgroundColor}/>
+                    
+                    <View {...this.panResponder.panHandlers} style={[styles.body, this.props.style]}>
+                        {this.props.children}
+                    </View>
                 </View>
-            {/* </View> */}
             </SafeAreaView>
         </KeyboardAvoidingView>
     );
   }
 }
-const styles = createStyle({
+const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
   body: {
       flex: 1,
+      paddingTop:STATUSBAR_HEIGHT,
       // backgroundColor: "#f5f7f9"
   }
 });

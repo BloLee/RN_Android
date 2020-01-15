@@ -7,6 +7,7 @@ import CustomTabBar from "../components/CustomTabBar";
 import { productTree,productList } from "../../until/Adres";
 import ProductList from "./productList";
 import FlatListAll from "../components/FlatListAll";
+import Container from "../components/contanter";
 export default class ProductPage extends Component{
   static navigationOptions = ({ navigation }) => {
     // title: navigation.getParam('count'),
@@ -54,13 +55,7 @@ export default class ProductPage extends Component{
     const { headTab } = this.state;
     console.log(headTab)
     return ( 
-      <SafeAreaView style={{flex:1,}}>
-        <StatusBar
-          hidden={false}
-          translucent={ true } 
-          backgroundColor={'blue'} 
-          barStyle={'blue'}
-        />
+      <Container statusBarBackgroundColor={"#3498db"} barStyle={"light-content"}> 
         <ScrollableTabView
           scrollWithoutAnimation={true}
           renderTabBar={() => (<ScrollableTabBar someProp={'here'}  backgroundColor='#3498db' />)}
@@ -83,7 +78,7 @@ export default class ProductPage extends Component{
               }
           
         </ScrollableTabView> 
-      </SafeAreaView>
+      </Container>
     )
   }
 }

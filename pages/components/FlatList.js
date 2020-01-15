@@ -9,9 +9,8 @@ class FlatListPage extends Component{
   constructor(props){
     super(props)
     this.navigation = props.navigation; 
-    this.state={
-
-    }
+    this.state={ }
+    this.onEndReachedCalledDuringMomentum = false;
   }
   //打开详情
   openUrl(item){
@@ -90,6 +89,9 @@ class FlatListPage extends Component{
           renderItem={this._renderItem.bind(this)}
           style={styles.list} 
           // refreshing={true}
+          onMomentumScrollBegin={() => { 
+            this.onEndReachedCalledDuringMomentum = true;     
+          }}
           onEndReachedThreshold={0.1}
           onEndReached={this._onEndReached}
         /> 

@@ -8,7 +8,8 @@ import ScrollViewImage from "./components/ScrollViewImage";
 import FlatListPage from "./components/FlatList";
 import LoadText from "./components/LoadText";
 import NavigationRight from "./components/NavigationRight";
-import AntDesign from "react-native-vector-icons/AntDesign"; 
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Container from "./components/contanter"; 
 class HomePage extends Component {
   constructor(props){
     super(props)
@@ -137,39 +138,31 @@ class HomePage extends Component {
   }
   render() {
     return (
-      <View style={{flex:1}}>
-        <StatusBar
-          hidden={false}
-          translucent={ true } 
-          backgroundColor={'blue'} 
-          barStyle={'blue'}
-        />
-        <SafeAreaView style={{flex:1}}> 
-          <ScrollView  style={{flex:1,backgroundColor:"#f4f4f4",}}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh.bind(this)}
-                tintColor="#ff0000"
-                title="加载中..."
-                titleColor="#00ff00"
-                colors={['#ff0000', '#00ff00', '#0000ff']}
-                progressBackgroundColor="#fff"         
-              />
-            }
-            scrollsToTop={true}
-            scrollEventThrottle={100}
-            onScroll={this._onScroll.bind(this)}
-            onMomentumScrollEnd = {this._contentViewScroll.bind(this)} 
-          >
-            <ScrollViewImage imgData={this.state.banner} /> 
-            <FlatListPage {...this.props} data={this.state.souceList} />
-            {/* 加载中以及加载完成 */}
-            {/* <LoadText dataInfo={type:this.state.dataType;loadMore:this.state.loadMore} />  */}
-            <LoadText loadMore={this.state.loadMore} loadType={this.state.loadType} />
-          </ScrollView>
-        </SafeAreaView>
-      </View>
+      <Container statusBarBackgroundColor={"transparent"} barStyle={"dark-content"}>   
+        <ScrollView  style={{flex:1,backgroundColor:"#f4f4f4",}}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+              tintColor="#ff0000"
+              title="加载中..."
+              titleColor="#00ff00"
+              colors={['#ff0000', '#00ff00', '#0000ff']}
+              progressBackgroundColor="#fff"         
+            />
+          }
+          scrollsToTop={true}
+          scrollEventThrottle={100}
+          onScroll={this._onScroll.bind(this)}
+          onMomentumScrollEnd = {this._contentViewScroll.bind(this)} 
+        >
+          <ScrollViewImage imgData={this.state.banner} /> 
+          <FlatListPage {...this.props} data={this.state.souceList} />
+          {/* 加载中以及加载完成 */}
+          {/* <LoadText dataInfo={type:this.state.dataType;loadMore:this.state.loadMore} />  */}
+          <LoadText loadMore={this.state.loadMore} loadType={this.state.loadType} />
+        </ScrollView> 
+      </Container>
     )
   }
 }

@@ -15,9 +15,11 @@ import HomePage from "../pages/home";
 import DetailLink from "../pages/detail/detailLink";
 import ProductPage from "../pages/product/index";  //项目
 import SquarePage from "../pages/square/index";   //广场
+import SystemItem from "../pages/square/systemItem";
 import PublicPage from "../pages/public/index";   //公众号
 import MyPage from "../pages/My/index";           //我的
 import TabRootNavigator from "./tabrouter";
+
 /**
  * 全局路由
  */
@@ -32,19 +34,19 @@ _defaultNavigationOptions = (navigation, title, option = {}) => {
     headerRight = <View/>;
     titleAlign= "center";
   }
-  if( navigation.state.routeName === "TabRootNavigator" ){
-    const _eq = navigation.state.index;
-    const _routes = navigation.state.routes;
-    const _name = _routes[_eq].routeName;
-    switch( _name ){
-      case "home":
-        title = "首页"
-        headerRight = <NavigationRight {...navigation} itemInfo={{name:'home'}} />
-      break;
-      default:
-      break;
-    }
-  }
+  // if( navigation.state.routeName === "TabRootNavigator" ){
+  //   const _eq = navigation.state.index;
+  //   const _routes = navigation.state.routes;
+  //   const _name = _routes[_eq].routeName;
+  //   switch( _name ){
+  //     case "home":
+  //       title = "首页"
+  //       headerRight = <NavigationRight {...navigation} itemInfo={{name:'home'}} />
+  //     break;
+  //     default:
+  //     break;
+  //   }
+  // }
   let defaultOption = {
       // headerRight: headerRight,
       headerStyle: {
@@ -97,9 +99,12 @@ _defaultNavigationOptions = (navigation, title, option = {}) => {
 const GetRouter = createStackNavigator({ 
   TabRootNavigator:{
       screen:TabRootNavigator,
-      navigationOptions: ({navigation}) => { 
-        return _defaultNavigationOptions(navigation)
+      navigationOptions:{ 
+        headerTransparent: "red", // 背景透明
       }
+      // navigationOptions: ({navigation}) => { 
+      //   return _defaultNavigationOptions(navigation)
+      // }
     },
     Login:{ 
       screen:Login,
@@ -120,11 +125,20 @@ const GetRouter = createStackNavigator({
         return _defaultNavigationOptions(navigation,params.title)
       }
     },
+    SystemItem:{
+      screen:SystemItem,
+      // navigationOptions: ({navigation}) => { 
+      //   return _defaultNavigationOptions(navigation)
+      // }
+      navigationOptions:{
+        header:null
+      }
+    }
   },{
     // initialRouteName: "TabRootNavigator",
     headerMode: 'float',
     mode: 'card',  
-    cardStyle:({backgroundColor:'#f4f4f4'}), 
+    cardStyle:({backgroundColor:'#f5f5f5'}), 
     transitionConfig:(()=>({
       //因为ios 的导航动画默认是从左到右，所以，这里配置一下动画，使用react-navigation已经实现的从左到右的动画，
       //适配Android，不过，需要导入动画  

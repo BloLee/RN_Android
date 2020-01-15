@@ -84,7 +84,9 @@ _defaultNavigationOptions = (navigation, title, option = {}) => {
 const TabRootNavigator = createBottomTabNavigator({
   home:{
     screen:HomePage,
-    navigationOptions:{  
+    navigationOptions: { 
+      header:null,
+      // return _defaultNavigationOptions(navigation,"登录")
       gesturesEnabled:true,
       tabBarPosition: 'bottom',
       tabBarLabel:'首页',
@@ -96,6 +98,18 @@ const TabRootNavigator = createBottomTabNavigator({
         navigation.navigate('home', {refresh: true});
       }
     }
+    // navigationOptions:{  
+    //   gesturesEnabled:true,
+    //   tabBarPosition: 'bottom',
+    //   tabBarLabel:'首页',
+    //   showLabel: false,
+    //   tabBarIcon: ({tintColor, focused}) => (
+    //     <AntDesign name={focused ? 'home' : 'home'} size={22} color={focused ? '#3498db' : 'rgba(0,0,0,0.3)'}/>
+    //   ),
+    //   tabBarOnPress: ({navigation}) => {
+    //     navigation.navigate('home', {refresh: true});
+    //   }
+    // }
   },
   Product:{
     screen:ProductPage,

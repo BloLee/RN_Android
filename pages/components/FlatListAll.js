@@ -59,6 +59,10 @@ export default class FlatListAll extends Component{
       case "navigation":
         res = await navi_list();
       break;
+      case "SystemItem":
+        //获取体系某一个列表
+        res = await square_list({cid:id,page: page });
+      break;
       default:
         this.setState({refreshing:false})
       break;
@@ -104,9 +108,13 @@ export default class FlatListAll extends Component{
     this.getdata(); 
   }
   //打开详情
-  openUrl(item){
-    // console.log(item);
+  openUrl(item,type){
+    console.log(item);
     // this.navigation.navigate("DetailLink",{title:item.title,url:item.link})
+    if( type === "system" ){
+      NavigationService.navigate("SystemItem",{title:item.name,id:item.id});
+      return;
+    }
     NavigationService.navigate("DetailLink",{title:item.title,url:item.link})
   }
   //头部
@@ -162,7 +170,7 @@ export default class FlatListAll extends Component{
     switch (adres){
       case "system": 
         return (
-          <TouchableNativeFeedback style={styles.ListTouchable}>
+          <TouchableNativeFeedback style={styles.ListTouchable} onPress={() => this.openUrl(item,"system")}>
             <View style={styles.ListBox}>
               <Text style={styles.stystem_tit}>{item.name}</Text>
               <View style={styles.system_child}>
@@ -225,7 +233,7 @@ export default class FlatListAll extends Component{
                   adres === "product" ? <MyImage uri={item.envelopePic} style={styles.image} /> : null
                 }
                 
-                <View style={[styles.flex_1]}>
+                <View style={styles.listImag_rigth}>
                   <Text style={styles.titleName}>{ global.HtmlMacth(item.title) }</Text>
                   <Text style={styles.desc} numberOfLines={3}>{item.desc}</Text>
                 </View>
@@ -271,14 +279,14 @@ export default class FlatListAll extends Component{
                 </View>
                 <Text style={styles.niceDate}>{item.niceDate}</Text>
               </View>
-              <View style={styles.listCenter}>
+              <View style={[styles.listCenter]}>
                 {
                   adres === "product" ? <MyImage uri={item.envelopePic} style={styles.image} /> : null
                 }
                 
-                <View style={[styles.flex_1]}>
-                  <Text style={styles.titleName}>{ global.HtmlMacth(item.title) }</Text>
-                  <Text style={styles.desc} numberOfLines={3}>{item.desc}</Text>
+                <View style={styles.listImag_rigth}>
+                  <Text numberOfLines={1} style={styles.titleName}>{ global.HtmlMacth(item.title) }</Text>
+                  <Text numberOfLines={3} style={[styles.desc,{padding:5}]}>{item.desc}</Text>
                 </View>
               </View>
               <View style={styles.listFoter}>
@@ -325,9 +333,10 @@ const styles = StyleSheet.create({
   tags:{ fontSize:11, borderWidth:1, borderColor:"#009a61", color:"#009a61",paddingHorizontal:3, marginLeft:10, borderRadius:2 },
   niceDate:{fontSize:12, color:'#999',},
   listCenter:{ flexDirection:'row', marginVertical:8, },
-  image:{ width:100, height:100, marginRight:10 },
-  titleName:{ fontSize:15,marginTop:7, marginBottom:5,},
-  desc:{color:"#999",fontSize:13,lineHeight:25},
+  image:{ width:100, height:100, },
+  listImag_rigth:{flex:1, paddingHorizontal:5, justifyContent:"flex-start",},
+  titleName:{ fontSize:15, marginBottom:5,},
+  desc:{color:"#999",fontSize:13,lineHeight:25, justifyContent:"flex-start",},
   listFoter:{justifyContent:"flex-start", flexDirection:'row', alignItems:"center"},
   fontsize14:{fontSize:13,color:"#999"},
   heart:{ position:'absolute', zIndex:10, top:0,right:0, paddingVertical:5, paddingHorizontal:5},
