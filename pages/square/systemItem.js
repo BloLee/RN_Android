@@ -12,16 +12,15 @@ export default class SystemItem extends Component{
 
     }
   }
-  componentWillMount(){
+  UNSAFE_componentWillMount(){
 
   }
   getData = async () => {
-
     let res = await square_list();
   }
   render () {
-    const { params } = this.props.navigation.state;
-    console.log(params); 
+    // const { params } = this.props.navigation.state;
+    // console.log(params); 
     return (
       // <SafeAreaView style={{flex:1,}}>  
       //   <StatusBarHead />

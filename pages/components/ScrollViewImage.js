@@ -19,7 +19,7 @@ class ScrollViewImage extends Component{
     componentDidMount() {
       this._startTimer(); 
     } 
-    componentWillUnMount() {
+    UNSAFE_componentWillMount() {
         // clearInterval(this.interval);
     } 
     //演染图片
@@ -44,7 +44,7 @@ class ScrollViewImage extends Component{
         const { currentPage } = this.state;
         for(let i=0;i<imgData.length;i++){
             allCircle.push(
-                <Text key={i} style={[styles.instructions, i==currentPage?styles.activeInstruct:"" ]}></Text>
+                <View key={i} style={[styles.instructions, i==currentPage?styles.activeInstruct:"" ]}></View>
             )
         }
         return allCircle;
@@ -117,7 +117,7 @@ class ScrollViewImage extends Component{
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: ios == 'ios' ? 25 : 0
+    // marginTop: ios == 'ios' ? 25 : 0
   },
   circleContainer: {
     width: width,
@@ -130,15 +130,19 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
   instructions: { 
-    borderWidth:2,borderColor:"#999",
+    borderWidth:2,
+    borderColor:"#999",
+    // backgroundColor:"#fff",
     marginRight:15,
     width:10,
     height:10,
     borderRadius:50,
   },
   activeInstruct:{
-      backgroundColor:"#fff",
-      borderWidth:2,borderColor:"#fff",
+      backgroundColor:"#FFF",
+      borderWidth:2,
+      borderColor:"#FFF",
+      borderRadius:50,
   }
 });
 module.exports = ScrollViewImage;

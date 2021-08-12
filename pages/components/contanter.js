@@ -6,6 +6,7 @@ import StatusBarHead from './StatusBarHead';
 import PropTypes from 'prop-types';
 import {SafeAreaView,PanResponder,View, Text, Keyboard, KeyboardAvoidingView, Platform,StyleSheet,StatusBar} from 'react-native';
 import {withNavigation} from 'react-navigation'; 
+import { isIphoneX } from "../../until/global";
 const STATUSBAR_HEIGHT = (Platform.OS === 'ios' ? (isIphoneX() ? 44 : 20) : StatusBar.currentHeight);
 class Container extends React.PureComponent {
   // 构造

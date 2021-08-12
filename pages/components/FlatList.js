@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import { FlatList,View,Text,ActivityIndicator,
-  RefreshControl,SafeAreaView,StyleSheet, TouchableNativeFeedback,TouchableWithoutFeedback } from "react-native";
+  RefreshControl,SafeAreaView,StyleSheet, TouchableNativeFeedback,TouchableWithoutFeedback,
+  TouchableOpacity,TouchableHighlight } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import NavigationService from "../../until/NavigationService";
 import global from "../../until/global";
@@ -31,7 +32,8 @@ class FlatListPage extends Component{
     // console.log(item); 
     return (
       //
-      <TouchableNativeFeedback style={styles.ListTouchable} onPress={() => { this.openUrl(item) }} >
+      <TouchableOpacity style={styles.ListTouchable} activeOpacity={0.7}
+      onPress={() => { this.openUrl(item) }} >
         <View style={styles.ListBox}>
           <View style={styles.ListTopInfoBox}>
             <View style={styles.flex_1}>
@@ -44,11 +46,11 @@ class FlatListPage extends Component{
               }
               {
                 item.tags ? 
-                <View>
+                <View style={styles.flex_1}>  
                   {
                   item.tags.map((item,index) => 
                     <Text key={index} style={styles.tags}>{item.name}</Text>
-                  ) 
+                  )
                   }
                 </View> : null
               }
@@ -68,7 +70,7 @@ class FlatListPage extends Component{
             </Text> 
           </View> 
         </View>
-      </TouchableNativeFeedback>
+      </TouchableOpacity>
     )
   }
   //加载更多
@@ -100,16 +102,24 @@ class FlatListPage extends Component{
 }
 const styles = StyleSheet.create({
   list:{ paddingHorizontal:8, backgroundColor:"#f4f4f4",},
-  ListTouchable:{ position:"relative" },
-  ListBox:{ paddingVertical:10, paddingHorizontal:10, backgroundColor:"#fff", borderRadius:5,
+  ListTouchable:{ position:"relative", 
+    paddingVertical:10, paddingHorizontal:10, backgroundColor:"#fff", borderRadius:5,
     marginTop:10,
   },
+  // ListBox:{ paddingVertical:10, paddingHorizontal:10, backgroundColor:"#fff", borderRadius:5,
+  //   marginTop:10,
+  // },
   ListTopInfoBox:{
     flexDirection:'row',
     flex:1, 
     alignItems:'center',
   },
-  flex_1:{flex:1,flexDirection:'row',alignItems:'center',},
+  flex_1:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center', 
+    // borderColor:"#E24234",
+  },
   author:{ fontSize:13,fontWeight:'500', color:"#999" },
   is_top:{ fontSize:11, borderWidth:1,color:"#E24234",borderColor:"#E24234",
     marginLeft:10,paddingHorizontal:4,
@@ -126,7 +136,15 @@ const styles = StyleSheet.create({
     borderRadius:2,
     textAlign:"center",
   },
-  tags:{ fontSize:11, borderWidth:1, borderColor:"#009a61", color:"#009a61",paddingHorizontal:3, marginLeft:10, borderRadius:2 },
+  tags:{ 
+    fontSize:11, 
+    borderWidth:1, 
+    borderColor:"#009a61", 
+    color:"#009a61",
+    paddingHorizontal:3,
+    marginLeft:10, 
+    borderRadius:2 
+  },
   niceDate:{fontSize:12, color:'#999',},
   titleName:{ fontSize:15,marginTop:7, marginBottom:5,},
   fontsize14:{fontSize:13,color:"#999"},

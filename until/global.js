@@ -1,9 +1,16 @@
 import React,{Component} from "react";
-import {Platform,Dimensions,StatusBar} from 'react-native';
+import {Platform,Dimensions,StatusBar,AsyncStorage} from 'react-native';
 import DeviceInfo from 'react-native-device-info'; 
 //获取appid
 let ID = DeviceInfo.getBundleId().split('.')[1];
 const {width, height} = Dimensions.get('window');
+// iPhoneX Xs
+const X_WIDTH = 375;
+const X_HEIGHT = 812;
+// iPhoneXR XsMax
+const XR_WIDTH = 414;
+const XR_HEIGHT = 896;
+
 let global = {
   ID: ID,
   APP_API_URL:"https://www.wanandroid.com/",
@@ -45,4 +52,16 @@ function getColor(){
   const _INDEX = MathFloor();
   return global.color[_INDEX];
 }
+
+//判断是否为iphoneX或Xs
+export function isIphoneX() {
+  return (
+      Platform.OS === 'ios' && 
+      ((height === X_HEIGHT && width === X_WIDTH) || 
+      (height === X_WIDTH && width === X_HEIGHT)) ||
+      ((height === XR_HEIGHT && width === XR_WIDTH) || 
+        (height === XR_WIDTH && width === XR_HEIGHT))
+  )
+}
+
 export default {global,HtmlMacth,StickyTop,MathFloor,getColor};

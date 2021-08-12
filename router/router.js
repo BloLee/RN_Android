@@ -1,34 +1,27 @@
 import React,{Component} from 'react';
 import { View, Text,StatusBar } from 'react-native';
 import { createAppContainer,StackNavigator, NavigationActions } from 'react-navigation';
-import { createStackNavigator, } from 'react-navigation-stack'; 
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator, } from 'react-navigation-stack';  
 import StackViewStyleInterpolator from "react-navigation-stack/src/views/StackView/StackViewStyleInterpolator";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import NavigationService from "../until/NavigationService";
 import global from "../until/global";
 import NavigationRight from "../pages/components/NavigationRight";
 import Login from "../pages/components/Login";
-import Register from "../pages/components/register";
-import App1 from "../App1";
-import HomePage from "../pages/home"; 
-import DetailLink from "../pages/detail/detailLink";
-import ProductPage from "../pages/product/index";  //项目
-import SquarePage from "../pages/square/index";   //广场
-import SystemItem from "../pages/square/systemItem";
-import PublicPage from "../pages/public/index";   //公众号
-import MyPage from "../pages/My/index";           //我的
+import Register from "../pages/components/register"; 
+import DetailLink from "../pages/detail/detailLink";  
+import SystemItem from "../pages/square/systemItem";  
 import TabRootNavigator from "./tabrouter";
 
 /**
  * 全局路由
  */
 //默认头部样式
-_defaultNavigationOptions = (navigation, title, option = {}) => {
+let _defaultNavigationOptions = (navigation, title, option = {}) => {
   const hasHeaderRightPages = ['HomePage','Login',"Register","TabRootNavigator"];
   let headerRight = "";
   // .routes[navigation.state.index]
-  console.log(navigation.state)
+  // console.log(navigation.state)
   let titleAlign = "left"; 
   if (hasHeaderRightPages.indexOf(navigation.state.routeName) === -1) {
     headerRight = <View/>;
@@ -99,15 +92,15 @@ _defaultNavigationOptions = (navigation, title, option = {}) => {
 const GetRouter = createStackNavigator({ 
   TabRootNavigator:{
       screen:TabRootNavigator,
-      navigationOptions:{ 
-        headerTransparent: "red", // 背景透明
+      navigationOptions:{
+        header:null
       }
-      // navigationOptions: ({navigation}) => { 
-      //   return _defaultNavigationOptions(navigation)
-      // }
     },
     Login:{ 
       screen:Login,
+      // navigationOptions:{
+      //   header:null
+      // }
       navigationOptions: ({navigation}) => { 
         return _defaultNavigationOptions(navigation,"登录")
       }
@@ -127,15 +120,13 @@ const GetRouter = createStackNavigator({
     },
     SystemItem:{
       screen:SystemItem,
-      // navigationOptions: ({navigation}) => { 
-      //   return _defaultNavigationOptions(navigation)
-      // }
-      navigationOptions:{
-        header:null
-      }
+      navigationOptions: ({navigation}) => { 
+        const { params } = navigation.state;
+        return _defaultNavigationOptions(navigation,params.title)
+      } 
     }
   },{
-    // initialRouteName: "TabRootNavigator",
+    // initialRouteName: "Login",
     headerMode: 'float',
     mode: 'card',  
     cardStyle:({backgroundColor:'#f5f5f5'}), 

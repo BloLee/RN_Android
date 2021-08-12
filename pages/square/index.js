@@ -14,7 +14,7 @@ export default class SquarePage extends Component{
   }
   render () {
     return (
-      <Container statusBarBackgroundColor={"#3498db"} barStyle={"light-content"}>
+      <Container statusBarBackgroundColor={"#3498db"} barStyle={"light-content"} style={{paddingTop:0}}>
         <ScrollableTab name={"square"} />
       </Container>
       // <SafeAreaView style={{flex:1,}}>  

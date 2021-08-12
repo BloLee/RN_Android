@@ -26,14 +26,24 @@ import {
 } from 'react-native/Libraries/NewAppScreen'; 
 import TabBar from "./router/router";  
 import { Provider } from 'react-redux';
-import store from './redux/index'; 
+import store from './redux/index'
 // export default getRouter;
 export default class App extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      color: '#f4511E'
+    };
+    console.log(store);
+    
+  }
   render() {
     return (
       // 将store作为prop传入，即可使应用中的所有组件使用store 
       <Provider store={store}>
-        <TabBar />
+        <TabBar screenProps={{
+          themeColor: this.state.color
+        }} />
       </Provider>
     )
   }

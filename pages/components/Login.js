@@ -1,5 +1,6 @@
 import React,{Component} from "react";
-import { FlatList,View,Text,TextInput,Button,TouchableOpacity,ActivityIndicator,StyleSheet } from "react-native";
+import { FlatList,View,Text,TextInput,Button,StatusBar,
+  TouchableOpacity,ActivityIndicator,StyleSheet } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { login } from "../../until/Adres";
@@ -34,7 +35,8 @@ export default class Login extends Component{
   }
   render () {
     return (
-      <View style={styles.Login_box}>
+      <View style={styles.Login_box}> 
+ 
         <View style={styles.Logo}>
           {/* android1 */}
           <MaterialCommunityIcons name="android-head" size={80} color="#3498db" /> 

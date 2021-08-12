@@ -15,7 +15,7 @@ import NavigationService from "./NavigationService";
 // }) 
 const instance = axios.create({
   baseURL: 'https://www.wanandroid.com/',
-  timeout: 3000,
+  timeout: 10000,
   // headers: { 'X-Custom-Header': 'foobar' }
 });
 var _num = 0;

@@ -22,7 +22,7 @@ export default class ProductList extends Component{
       loadType:"",
     }
   }
-  componentWillMount(){ 
+  UNSAFE_componentWillMount(){ 
     const { id,dataSource,adres } = this.props; 
     this.setState({
       id:id,

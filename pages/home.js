@@ -138,7 +138,7 @@ class HomePage extends Component {
   }
   render() {
     return (
-      <Container statusBarBackgroundColor={"transparent"} barStyle={"dark-content"}>   
+      // <Container statusBarBackgroundColor={"transparent"} barStyle={"dark-content"}>   
         <ScrollView  style={{flex:1,backgroundColor:"#f4f4f4",}}
           refreshControl={
             <RefreshControl
@@ -162,13 +162,13 @@ class HomePage extends Component {
           {/* <LoadText dataInfo={type:this.state.dataType;loadMore:this.state.loadMore} />  */}
           <LoadText loadMore={this.state.loadMore} loadType={this.state.loadType} />
         </ScrollView> 
-      </Container>
+      // </Container>
     )
   }
 }
 const styles = StyleSheet.create({ 
   ListContainer:{ paddingHorizontal:8, 
-    backgroundColor:"#f4f4f4",
+    backgroundColor:"#f4f4f4", 
   },
   ListBox:{ paddingVertical:10, paddingHorizontal:10, backgroundColor:"#fff", borderRadius:5,
     marginTop:10,

@@ -9,12 +9,7 @@ import ProductList from "./productList";
 import FlatListAll from "../components/FlatListAll";
 import Container from "../components/contanter";
 export default class ProductPage extends Component{
-  static navigationOptions = ({ navigation }) => {
-    // title: navigation.getParam('count'),
-    return {
-      header:null,
-    }
-  };
+  
   constructor(props){
     super(props)
     this.state = {
@@ -55,7 +50,7 @@ export default class ProductPage extends Component{
     const { headTab } = this.state;
     console.log(headTab)
     return ( 
-      <Container statusBarBackgroundColor={"#3498db"} barStyle={"light-content"}> 
+      <Container statusBarBackgroundColor={"#3498db"} barStyle={"light-content"} style={{paddingTop:0}}> 
         <ScrollableTabView
           scrollWithoutAnimation={true}
           renderTabBar={() => (<ScrollableTabBar someProp={'here'}  backgroundColor='#3498db' />)}

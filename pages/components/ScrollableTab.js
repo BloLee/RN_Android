@@ -17,7 +17,7 @@ export default class ScrollableTab extends Component {
       name:'',
     }
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {name} = this.props;
     let _headTabList =  name === "square" ? _headTab : [];
     this.setState({name:name,headTab:_headTabList},()=>{

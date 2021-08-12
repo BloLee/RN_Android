@@ -1,8 +1,9 @@
 import React,{Component} from "react";
 import { View,Text,FlatList,RefreshControl,
-  TouchableNativeFeedback,StyleSheet } from "react-native"; 
+  TouchableNativeFeedback,TouchableOpacity,StyleSheet } from "react-native"; 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import global from "../../until/global";
+import { storeData } from "../../until/until";
 import Adres, { productList,user_article,square_tree,square_list,navi_list } from "../../until/Adres";
 import NavigationService from "../../until/NavigationService";
 import MyImage from "./myImage";
@@ -17,13 +18,15 @@ export default class FlatListAll extends Component{
       page:0,
       dataSource:[],
       adres:"",
-      pageCount:'',  //总页数
-      loadMore:false,
+      pageCount:'',  //总页数 
       loadType:"",
+      loadMore:false,
+      onEndReachedCalledDuringMomentum:false,
     }
     this.onEndReachedCalledDuringMomentum = false;
   }
-  componentWillMount(){ 
+  //初始化
+  UNSAFE_componentWillMount(){ 
     const { id,dataSource,adres } = this.props; 
     // console.log(this.props); 
     this.setState({
@@ -76,7 +79,7 @@ export default class FlatListAll extends Component{
       }else{
         _dataSource = dataSource.concat(res.data.datas); 
       }
-      console.log(_dataSource);
+      // console.log(_dataSource);
       
       this.setState({
         refreshing:false,
@@ -94,9 +97,9 @@ export default class FlatListAll extends Component{
   }
   //加载更多
   _onEndReached(){
-    const { page,pageCount,adres } = this.state;
+    const { page,pageCount,adres,onEndReachedCalledDuringMomentum } = this.state;
     //当屏幕滚动时  this.onEndReachedCalledDuringMomentum 变为true 可以进行上啦加载
-    if( !this.onEndReachedCalledDuringMomentum ){
+    if( !this.onEndReachedCalledDuringMomentum && onEndReachedCalledDuringMomentum ){
       console.log("滚动动画开始时调用此函数。----------------------")
       return;
     }
@@ -108,14 +111,26 @@ export default class FlatListAll extends Component{
     this.getdata(); 
   }
   //打开详情
-  openUrl(item,type){
-    console.log(item);
+  /**
+   * 
+   * @param {*} item 当前列数据
+   * @param {*} type 当前页面 类型
+   * @param {*} index 当前点击列表索引
+   */
+  openUrl(item,type,index){
+    // console.log(item);
     // this.navigation.navigate("DetailLink",{title:item.title,url:item.link})
+    const _title = item.name ? item.name : item.title;
     if( type === "system" ){
-      NavigationService.navigate("SystemItem",{title:item.name,id:item.id});
+      const { dataSource } = this.state;
+      const _children = JSON.stringify(dataSource[index]);
+      storeData("SystemChild",_children);
+      console.log(_children)
+      
+      NavigationService.navigate("SystemItem",{title:_title,id:item.id});
       return;
     }
-    NavigationService.navigate("DetailLink",{title:item.title,url:item.link})
+    NavigationService.navigate("DetailLink",{title:_title,url:item.link})
   }
   //头部
   renderHeader(){
@@ -153,15 +168,16 @@ export default class FlatListAll extends Component{
           ref={(flatList)=>this._flatList = flatList}
           onEndReachedThreshold={0.1}//执行上啦的时候10%执行
           onMomentumScrollBegin={() => { 
-            this.onEndReachedCalledDuringMomentum = true;     
+            this.onEndReachedCalledDuringMomentum = true; 
+            this.setState({onEndReachedCalledDuringMomentum:true})    
           }}
-          onEndReached={this._onEndReached.bind(this)}
+          onEndReached={this._onEndReached.bind(this)}  
         />
       </View>
     )
   }
   //生成结构 
-  _renderItem( {item} ){
+  _renderItem( {item,index} ){
     const { adres } = this.state;
     // console.log(adres)
     // { item }是一种“解构”写法，请阅读ES2015语法的相关文档
@@ -170,7 +186,7 @@ export default class FlatListAll extends Component{
     switch (adres){
       case "system": 
         return (
-          <TouchableNativeFeedback style={styles.ListTouchable} onPress={() => this.openUrl(item,"system")}>
+          <TouchableOpacity activeOpacity={1}  style={styles.ListTouchable} onPress={() => this.openUrl(item,"system",index)}>
             <View style={styles.ListBox}>
               <Text style={styles.stystem_tit}>{item.name}</Text>
               <View style={styles.system_child}>
@@ -181,12 +197,12 @@ export default class FlatListAll extends Component{
                 }
               </View>
             </View>
-          </TouchableNativeFeedback>
+          </TouchableOpacity>
         )
       break;
       case "navigation": 
       return (
-        <TouchableNativeFeedback style={styles.ListTouchable}>
+        <TouchableOpacity activeOpacity={1} style={styles.ListTouchable}>
           <View style={styles.ListBox}> 
             <Text style={styles.stystem_tit}>{item.name}</Text>
             <View style={styles.system_child}>
@@ -198,13 +214,13 @@ export default class FlatListAll extends Component{
               }
             </View>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       )
       break;
       case "square":
         return (
           //
-          <TouchableNativeFeedback style={styles.ListTouchable} onPress={() => { this.openUrl(item) }} >
+          <TouchableOpacity style={styles.ListTouchable} activeOpacity={0.7} onPress={() => { this.openUrl(item) }} >
             <View style={styles.ListBox}>
               <View style={styles.ListHead}>
                 <View style={styles.flex_1}>
@@ -249,13 +265,13 @@ export default class FlatListAll extends Component{
                 </Text>
               </View>
             </View>
-          </TouchableNativeFeedback>
+          </TouchableOpacity>
         )
       break;
       default:
         return (
           //
-          <TouchableNativeFeedback style={styles.ListTouchable} onPress={() => { this.openUrl(item) }} >
+          <TouchableOpacity activeOpacity={1} style={styles.ListTouchable} onPress={() => { this.openUrl(item) }} >
             <View style={styles.ListBox}>
               <View style={styles.ListHead}>
                 <View style={styles.flex_1}>
@@ -300,7 +316,7 @@ export default class FlatListAll extends Component{
                 </Text>
               </View>
             </View>
-          </TouchableNativeFeedback>
+          </TouchableOpacity>
         )
       break;
     }
@@ -308,10 +324,10 @@ export default class FlatListAll extends Component{
   }
 }
 const styles = StyleSheet.create({
-  list:{ paddingHorizontal:8, },
+  list:{ paddingHorizontal:8, backgroundColor:'#f4f4f4'},
   ListTouchable:{justifyContent:"flex-start", flexDirection:'row',},
   ListBox:{ paddingVertical:10, paddingHorizontal:10, backgroundColor:"#fff", borderRadius:5,
-  marginTop:10,},
+  marginTop:10,flex:1,},
   ListHead:{ flex:1, justifyContent:"flex-start", flexDirection:'row',},
   flex_1:{ flex:1,flexDirection:'row',alignItems:'center',}, 
   author:{ fontSize:13,fontWeight:'500', color:"#999" },
